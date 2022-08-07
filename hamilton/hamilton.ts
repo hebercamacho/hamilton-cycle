@@ -5,24 +5,23 @@ export class No {
     grau: number;
     vizinhos: Array<No>;
     constructor(id: number) {
-        this.grau=0;
+        this.grau = 0;
         this.id = id;
         this.passouPorAqui = false;
         this.vizinhos = new Array<No>();
     }
 
-    inserirVizinho(viz: No)
-    {
+    inserirVizinho(viz: No) {
         this.vizinhos.push(viz);
         this.grau++;
     }
-    
+
     //retorna o numero de nos vizinhos que possuem passouPorAqui=true
-    getVizinhosDisponiveis = function (): number {
+    getVizinhosDisponiveis(): number {
         let cont = 0;
         //iteracao por todos os vizinhos
         this.vizinhos.forEach(viz => {
-            if(viz.passouPorAqui) cont++;
+            if (!viz.passouPorAqui) cont++;
         });
         return cont;
     }
@@ -41,17 +40,39 @@ export class Grafo {
         }
     }
     //inserir aresta no grafo G
-    inserirAresta = function (node1: number, node2: number) {
+    inserirAresta(node1: number, node2: number) {
         this.adj[node1].inserirVizinho(this.adj[node2]);
         this.adj[node2].inserirVizinho(this.adj[node1]);
         this.arestas++;
     }
 
-    possuiCicloHamiltoniano = function(noInicial: number): boolean {
+    possuiCicloHamiltoniano(noInicial: number): boolean {
         //eliminar grafos inválidos
-        if(this.adj.find((n: No) => n.getVizinhosDisponiveis() < 2)) return false;
+        //grafos sem o número mínimo de arestas pra formar um ciclo
+        if (this.arestas < this.vertices)
+            return false;
+        //grafos com vertices desconexos ou conectados por uma aresta
+        if (this.adj.find((n: No) => n.getVizinhosDisponiveis() < 2))
+            return false;
 
-        return false;
+        //acertar grafos que com certeza
+        //grafos completos
+        if (this.adj.every((n: No) => n.grau >= this.vertices - 1)) return true;
+
+        //busca
+        let passos = 0;
+        for (let no: No | undefined = this.adj[noInicial]; no != undefined && passos < this.vertices; passos++) {
+            console.log("verificando no ", no.id);
+            no.passouPorAqui = true;
+            //implementar heuristica de busca
+
+            if (no.getVizinhosDisponiveis() == 0 && no.vizinhos.includes(this.adj[noInicial]))
+                return true;
+
+            no = no.vizinhos.find(viz => !viz.passouPorAqui)
+        }
+        console.log("passos", passos);
+        return passos==this.vertices;
     }
 };
 
@@ -68,5 +89,5 @@ G.inserirAresta(1, 4);
 G.inserirAresta(2, 4);
 G.inserirAresta(3, 4);
 
-G.adj.map(e => console.log(e));
-G.possuiCicloHamiltoniano(0);
+// G.adj.map(e => console.log(e));
+console.log('possuiCicloHamiltoniano', G.possuiCicloHamiltoniano(0));
