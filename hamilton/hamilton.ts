@@ -62,16 +62,13 @@ export class Grafo {
         //busca por primeiro vizinho
         console.log("iniciando busca por primeiro vizinho disponível");
         let passos = 0;
-        for (let no: No | undefined = this.adj[noInicial]; ; passos++) {
+        for (let no: No | undefined = this.adj[noInicial]; passos < this.vertices; passos++) {
             if (no == undefined) {
-                console.log("undefined no");
+                console.log("Busca chegou a um beco sem saida");
                 break;
             }
-            if (passos == this.vertices) {
-                console.log("numero de passos excedido");
-                break;
-            }
-            console.log("verificando no ", no.id);
+
+            console.log("Verificando nó", no.id);
             no.passouPorAqui = true;
             //implementar heuristica de busca
 
@@ -85,19 +82,16 @@ export class Grafo {
         //resetar flags de busca
         this.adj.forEach((n: No) => n.passouPorAqui = false);
 
-        //busca por vizinho com mais vizinhos disponiveis, desempate com menor grau, desempate com 
-        console.log("iniciando busca por vizinho com menor grau");
+        //busca por vizinho com mais vizinhos disponiveis, desempate com menor grau, desempate com maior id
+        console.log("iniciando busca por vizinho com mais vizinhos disponiveis");
         passos = 0;
-        for (let no: No | undefined = this.adj[noInicial]; ; passos++) {
+        for (let no: No | undefined = this.adj[noInicial]; passos < this.vertices; passos++) {
             if (no == undefined) {
-                console.log("undefined no");
+                console.log("Busca chegou a um beco sem saida");
                 break;
             }
-            if (passos == this.vertices) {
-                console.log("numero de passos excedido");
-                break;
-            }
-            console.log("verificando no ", no.id);
+
+            console.log("Verificando nó", no.id);
             no.passouPorAqui = true;
             //implementar heuristica de busca
 
@@ -106,24 +100,21 @@ export class Grafo {
 
             no = no.vizinhos.sort(sortNos).find(viz => !viz.passouPorAqui)
         }
-        console.log("busca por vizinho com menor grau concluída em ", passos, "passos");
+        console.log("busca por vizinho com  mais vizinhos disponiveis concluída em ", passos, "passos");
 
         //resetar flags de busca
         this.adj.forEach((n: No) => n.passouPorAqui = false);
 
-        //busca por vizinho com maior grau
-        console.log("iniciando busca por vizinho com maior grau");
+        //busca por vizinho com menos vizinhos disponiveis, desempate com maior grau, desempate com menor id
+        console.log("iniciando busca por vizinho com menos vizinhos disponiveis");
         passos = 0;
-        for (let no: No | undefined = this.adj[noInicial]; ; passos++) {
+        for (let no: No | undefined = this.adj[noInicial]; passos < this.vertices; passos++) {
             if (no == undefined) {
-                console.log("undefined no");
+                console.log("Busca chegou a um beco sem saida");
                 break;
             }
-            if (passos == this.vertices) {
-                console.log("numero de passos excedido");
-                break;
-            }
-            console.log("verificando no ", no.id);
+
+            console.log("verificando no", no.id);
             no.passouPorAqui = true;
             //implementar heuristica de busca
 
@@ -132,11 +123,12 @@ export class Grafo {
 
             no = no.vizinhos.sort(sortNos).reverse().find(viz => !viz.passouPorAqui)
         }
-        console.log("busca por vizinho com maior grau concluída em ", passos, "passos");
+        console.log("busca por vizinho com menos vizinhos disponiveis concluída em ", passos, "passos");
         return false;
     }
 };
 
+//função auxiliar para ordenar os nós
 function sortNos(a: No, b: No) {
     if (a.getVizinhosDisponiveis() == b.getVizinhosDisponiveis()) {
         if (a.grau == b.grau) {
@@ -147,8 +139,11 @@ function sortNos(a: No, b: No) {
     return a.getVizinhosDisponiveis() < b.getVizinhosDisponiveis() ? -1 : 1;
 }
 
+/**CONSTRUÇÃO DO GRAFO, ALTERE SOMENTE AQUI */
+//construtor de Grafo recebe o numero de vertices do grafo
 let G: Grafo = new Grafo(20);
 
+//cada aresta deve ser inserida uma vez, ela será considerada como bidirecional!
 G.inserirAresta(0, 1);
 G.inserirAresta(0, 4);
 G.inserirAresta(0, 7);
@@ -181,5 +176,8 @@ G.inserirAresta(18, 19);
 
 
 
-// G.adj.map(e => console.log(e));
-console.log('possuiCicloHamiltoniano', G.possuiCicloHamiltoniano(0));
+//EXIBIÇÃO DO RESULTADO
+if (G.possuiCicloHamiltoniano(0))
+    console.log('Grafo possui Ciclo Hamiltoniano!');
+else
+    console.log('Grafo não possui Ciclo Hamiltoniano, ou problema não foi tratável');
