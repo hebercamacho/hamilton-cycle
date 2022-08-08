@@ -38,4 +38,4 @@ G.inserirAresta(1, 2);
 G.inserirAresta(1, 3);
 G.inserirAresta(2, 3);
 ```
-Outros exemplos podem ser encontrados no arquivo [grafos](/hamilton/grafos.txt).
+Outros exemplos podem ser encontrados no arquivo [grafos](/grafos.txt).

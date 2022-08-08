@@ -1,0 +1,68 @@
+//possui ciclo
+let G: Grafo = new Grafo(5);
+
+G.inserirAresta(0, 1);
+G.inserirAresta(0, 3);
+G.inserirAresta(1, 2);
+G.inserirAresta(1, 3);
+G.inserirAresta(1, 4);
+G.inserirAresta(2, 4);
+G.inserirAresta(3, 4);
+
+//não possui ciclo
+let G: Grafo = new Grafo(7);
+
+G.inserirAresta(0, 1);
+G.inserirAresta(0, 3);
+G.inserirAresta(0, 5);
+G.inserirAresta(1, 2);
+G.inserirAresta(1, 4);
+G.inserirAresta(1, 6);
+G.inserirAresta(2, 3);
+G.inserirAresta(2, 5);
+G.inserirAresta(3, 4);
+G.inserirAresta(3, 6);
+G.inserirAresta(4, 5);
+G.inserirAresta(5, 6);
+
+//possui ciclo mas depende do caminho
+let G: Grafo = new Grafo(4);
+
+G.inserirAresta(0, 1);
+G.inserirAresta(0, 2);
+G.inserirAresta(1, 2);
+G.inserirAresta(1, 3);
+G.inserirAresta(2, 3);
+
+//possui ciclo mas depende do caminho
+let G: Grafo = new Grafo(20);
+
+G.inserirAresta(0, 1);
+G.inserirAresta(0, 4);
+G.inserirAresta(0, 7);
+G.inserirAresta(1, 2);
+G.inserirAresta(1, 9);
+G.inserirAresta(2, 3);
+G.inserirAresta(2, 11);
+G.inserirAresta(3, 4);
+G.inserirAresta(3, 13);
+G.inserirAresta(4, 5);
+G.inserirAresta(5, 6);
+G.inserirAresta(5, 14);
+G.inserirAresta(6, 7);
+G.inserirAresta(6, 16);
+G.inserirAresta(7, 8);
+G.inserirAresta(8, 9);
+G.inserirAresta(8, 17);
+G.inserirAresta(9, 10);
+G.inserirAresta(10, 11);
+G.inserirAresta(10, 18);
+G.inserirAresta(11, 12);
+G.inserirAresta(12, 13);
+G.inserirAresta(12, 19);
+G.inserirAresta(13, 14);
+G.inserirAresta(14, 15);
+G.inserirAresta(15, 16);
+G.inserirAresta(16, 17);
+G.inserirAresta(17, 18);
+G.inserirAresta(18, 19);
