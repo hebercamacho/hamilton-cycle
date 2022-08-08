@@ -54,9 +54,18 @@ var Grafo = /** @class */ (function () {
         //grafos completos
         if (this.adj.every(function (n) { return n.grau >= _this.vertices - 1; }))
             return true;
-        //busca
+        //busca por primeiro vizinho
+        console.log("iniciando busca por primeiro vizinho disponível");
         var passos = 0;
-        for (var no = this.adj[noInicial]; no != undefined && passos < this.vertices; passos++) {
+        for (var no = this.adj[noInicial];; passos++) {
+            if (no == undefined) {
+                console.log("undefined no");
+                break;
+            }
+            if (passos == this.vertices) {
+                console.log("numero de passos excedido");
+                break;
+            }
             console.log("verificando no ", no.id);
             no.passouPorAqui = true;
             //implementar heuristica de busca
@@ -64,21 +73,95 @@ var Grafo = /** @class */ (function () {
                 return true;
             no = no.vizinhos.find(function (viz) { return !viz.passouPorAqui; });
         }
-        console.log("passos", passos);
-        return passos == this.vertices;
+        console.log("busca por primeiro vizinho concluida em ", passos, "passos");
+        //resetar flags de busca
+        this.adj.forEach(function (n) { return n.passouPorAqui = false; });
+        //busca por vizinho com mais vizinhos disponiveis, desempate com menor grau, desempate com 
+        console.log("iniciando busca por vizinho com menor grau");
+        passos = 0;
+        for (var no = this.adj[noInicial];; passos++) {
+            if (no == undefined) {
+                console.log("undefined no");
+                break;
+            }
+            if (passos == this.vertices) {
+                console.log("numero de passos excedido");
+                break;
+            }
+            console.log("verificando no ", no.id);
+            no.passouPorAqui = true;
+            //implementar heuristica de busca
+            if (no.getVizinhosDisponiveis() == 0 && no.vizinhos.includes(this.adj[noInicial]))
+                return true;
+            no = no.vizinhos.sort(sortNos).find(function (viz) { return !viz.passouPorAqui; });
+        }
+        console.log("busca por vizinho com menor grau concluída em ", passos, "passos");
+        //resetar flags de busca
+        this.adj.forEach(function (n) { return n.passouPorAqui = false; });
+        //busca por vizinho com maior grau
+        console.log("iniciando busca por vizinho com maior grau");
+        passos = 0;
+        for (var no = this.adj[noInicial];; passos++) {
+            if (no == undefined) {
+                console.log("undefined no");
+                break;
+            }
+            if (passos == this.vertices) {
+                console.log("numero de passos excedido");
+                break;
+            }
+            console.log("verificando no ", no.id);
+            no.passouPorAqui = true;
+            //implementar heuristica de busca
+            if (no.getVizinhosDisponiveis() == 0 && no.vizinhos.includes(this.adj[noInicial]))
+                return true;
+            no = no.vizinhos.sort(sortNos).reverse().find(function (viz) { return !viz.passouPorAqui; });
+        }
+        console.log("busca por vizinho com maior grau concluída em ", passos, "passos");
+        return false;
     };
     return Grafo;
 }());
 exports.Grafo = Grafo;
 ;
-//teste mockado
-var G = new Grafo(5);
+function sortNos(a, b) {
+    if (a.getVizinhosDisponiveis() == b.getVizinhosDisponiveis()) {
+        if (a.grau == b.grau) {
+            return a.id > b.id ? -1 : 1;
+        }
+        return a.grau < b.grau ? -1 : 1;
+    }
+    return a.getVizinhosDisponiveis() < b.getVizinhosDisponiveis() ? -1 : 1;
+}
+var G = new Grafo(20);
 G.inserirAresta(0, 1);
-G.inserirAresta(0, 3);
+G.inserirAresta(0, 4);
+G.inserirAresta(0, 7);
 G.inserirAresta(1, 2);
-G.inserirAresta(1, 3);
-G.inserirAresta(1, 4);
-G.inserirAresta(2, 4);
+G.inserirAresta(1, 9);
+G.inserirAresta(2, 3);
+G.inserirAresta(2, 11);
 G.inserirAresta(3, 4);
+G.inserirAresta(3, 13);
+G.inserirAresta(4, 5);
+G.inserirAresta(5, 6);
+G.inserirAresta(5, 14);
+G.inserirAresta(6, 7);
+G.inserirAresta(6, 16);
+G.inserirAresta(7, 8);
+G.inserirAresta(8, 9);
+G.inserirAresta(8, 17);
+G.inserirAresta(9, 10);
+G.inserirAresta(10, 11);
+G.inserirAresta(10, 18);
+G.inserirAresta(11, 12);
+G.inserirAresta(12, 13);
+G.inserirAresta(12, 19);
+G.inserirAresta(13, 14);
+G.inserirAresta(14, 15);
+G.inserirAresta(15, 16);
+G.inserirAresta(16, 17);
+G.inserirAresta(17, 18);
+G.inserirAresta(18, 19);
 // G.adj.map(e => console.log(e));
 console.log('possuiCicloHamiltoniano', G.possuiCicloHamiltoniano(0));
